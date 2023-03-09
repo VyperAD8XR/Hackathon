@@ -33,8 +33,10 @@ public class Tablet : MonoBehaviour
     void Start()
     {
 
+
         LoadQuestion();
     }
+
 
    
     public void LoadQuestion()
@@ -53,6 +55,7 @@ public class Tablet : MonoBehaviour
         _question = GameManager.Instance.quizQuestions.Questions[_questaionIndex];
        
         GameManager.Instance.screenQuestion.text = _question.question;
+
 
         foreach (GameObject _answerButton in GameObject.FindGameObjectsWithTag("AnswerButton"))
         {
@@ -97,8 +100,10 @@ public class Tablet : MonoBehaviour
         switch (_button.tag)
         {
             case "AnswerButton":
+
                 if (_answerSelected) { return; }
                 GameManager.Instance.UpdateScore(CheckAnswer(_button));
+
                 break;
             case "NextQButton":
                 LoadQuestion();
