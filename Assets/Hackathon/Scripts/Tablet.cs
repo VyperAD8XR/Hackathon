@@ -11,14 +11,19 @@ using Unity.VisualScripting;
 
 public class Tablet : MonoBehaviour
 {
+
+    const string _colorCorrect = "1F6305";
+    const string _colorIncorrect = "4B0A0B";
+
     [HideInInspector]
     public static Tablet Instance;
     public Button answerButtonTemplate;
     public Button nextQuestionButton;
 
     private string _correctAnswer;
-    private int _intCorrectAnswerIndex;
+    private int _correctAnswerIndex;
     private List<Button> _answerButtons = new List<Button>();
+    private bool _answerSelected;
 
     private void Awake()
     {
@@ -43,12 +48,16 @@ public class Tablet : MonoBehaviour
         int _answerIndex = 0;
         int _questaionIndex = 0;
         int _totalAnswers;
-        List<Button> _availableButtons ;
+        List<Button> _availableButtons = new List<Button>();
         Button button;
+        string _answerButtonText;
 
         nextQuestionButton.gameObject.SetActive(false);
+        _answerSelected = false;
+        _answerButtons.Clear();
         _questaionIndex = Random.Range(0, GameManager.Instance.quizQuestions.Questions.Count - 1);
         _question = GameManager.Instance.quizQuestions.Questions[_questaionIndex];
+       
         GameManager.Instance.screenQuestion.text = _question.question;
 
         foreach (GameObject _answerButton in GameObject.FindGameObjectsWithTag("AnswerButton"))
@@ -56,6 +65,7 @@ public class Tablet : MonoBehaviour
             GameObject.Destroy(_answerButton);
         }
         answerButtonTemplate.gameObject.SetActive(true);
+
         for (int i = 0; i < _question.incorrectAnswers.Count + 1; i++)
         {
 
@@ -63,7 +73,7 @@ public class Tablet : MonoBehaviour
             _answerButtons[i].tag = "AnswerButton";
         }
 
-        _availableButtons = _answerButtons;
+        _availableButtons.AddRange(_answerButtons);
         _correctAnswer = _question.correctAnswer;
 
         while (_availableButtons.Count != 0)
@@ -71,30 +81,30 @@ public class Tablet : MonoBehaviour
             _answerIndex = Random.Range(0, _availableButtons.Count);
             if (_availableButtons.Count == _question.incorrectAnswers.Count + 1)
             {
+                _answerButtonText = _correctAnswer;
                 _availableButtons[_answerIndex].transform.Find("Text").GetComponent<TextMeshProUGUI>().text = _correctAnswer;
-                _intCorrectAnswerIndex = _answerIndex;
+                _correctAnswerIndex = _answerIndex;
             }
             else
             {
-                _availableButtons[_answerIndex].transform.Find("Text").GetComponent<TextMeshProUGUI>().text = _question.incorrectAnswers[0];
+                _answerButtonText = _question.incorrectAnswers[0];
                 _question.incorrectAnswers.RemoveAt(0);
             }
-
+            _availableButtons[_answerIndex].transform.Find("Text").GetComponent<TextMeshProUGUI>().text = _answerButtonText;
             _availableButtons.RemoveAt(_answerIndex);
-            // answerButtons[_answerIndex].available = false;
         }
         GameManager.Instance.quizQuestions.Questions.RemoveAt(_questaionIndex);
-       // GameManager.Instance.totalQuestions--;
         answerButtonTemplate.gameObject.SetActive(false);
 
     }
 
-    void ButtonClick(Button _button)
+    public void ButtonClick(Button _button)
     {
         switch (_button.tag)
         {
             case "AnswerButton":
-                GameManager.Instance.UpdateScore( CheckAnswer(_button));
+                if (_answerSelected) { return; }
+                GameManager.Instance.UpdateScore(CheckAnswer(_button));
                 break;
             case "NextQButton":
                 LoadQuestion();
@@ -104,13 +114,25 @@ public class Tablet : MonoBehaviour
 
     bool CheckAnswer(Button _button)
     {
-        for (int i = 0; 0 < _answerButtons.Count - 1; i++)
+
+        TextMeshProUGUI _buttonTextComponent;
+        bool _isCorrect;
+
+        _buttonTextComponent = _button.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+
+        _isCorrect = _buttonTextComponent.text == _correctAnswer;
+        _buttonTextComponent.color = (_isCorrect ? Color.black : Color.white);
+        _button.GetComponent<Button>().enabled =false;
+        _button.GetComponent<Image>().color = (_isCorrect ? Color.green : Color.red);
+
+        //        _button.GetComponent<Image>().color = (_isCorrect ? _colorCorrect.ToColor() : _colorIncorrect.ToColor());
+        if (!_isCorrect)
         {
-            _answerButtons[i].GetComponent<TextMeshPro>().color = (i == _intCorrectAnswerIndex ? Color.green : Color.red);
+            _answerButtons[_correctAnswerIndex].GetComponent<Image>().color = Color.green;
         }
+        _answerSelected = true;
         nextQuestionButton.gameObject.SetActive(true);
-        //Returns whether the answer is correct or not 
-        return _button.transform.Find("AnswerText").GetComponent<TextMeshProUGUI>().text == _correctAnswer;
+        return _isCorrect;
     }
 
 

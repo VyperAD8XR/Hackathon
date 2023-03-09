@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 493675517405820998}
   m_Layer: 5
   m_Name: NextQuestion
-  m_TagString: Untagged
+  m_TagString: NextQButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,7 +121,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9103793823564117442}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 109651114132813446}
+        m_TargetAssemblyTypeName: Tablet, Assembly-CSharp
+        m_MethodName: ButtonClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 493675517405820998}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2842754253704954468
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +160,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2842754253704954468}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -157,8 +169,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 7.399994, y: 0}
+  m_SizeDelta: {x: -56.8, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4292952413502429133
 CanvasRenderer:
@@ -251,7 +263,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 2.8231506, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -717,10 +729,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.24647082, g: 0.23740657, b: 0.9150943, a: 1}
+    m_NormalColor: {r: 0.24705882, g: 0.23921569, b: 0.9137255, a: 1}
     m_HighlightedColor: {r: 0.090196095, g: 0.33287627, b: 0.9254902, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.09019608, g: 0.33333334, b: 0.92549026, a: 1}
+    m_SelectedColor: {r: 0.09019608, g: 0.33333334, b: 0.92549026, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -740,13 +752,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 109651114132813446}
+        m_TargetAssemblyTypeName: Tablet, Assembly-CSharp
+        m_MethodName: ButtonClick
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgument: {fileID: 8381738008357267538}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -992,6 +1004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   answerButtonTemplate: {fileID: 8381738008357267538}
+  nextQuestionButton: {fileID: 493675517405820998}
 --- !u!4 &4458401691419631881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6f219b6ca327bf74ab6124dc1e2230ac, type: 3}

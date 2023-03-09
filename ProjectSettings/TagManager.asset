@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Question
   - AnswerButton
+  - NextQButton
   layers:
   - Default
   - TransparentFX
