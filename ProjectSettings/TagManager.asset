@@ -7,6 +7,8 @@ TagManager:
   - Question
   - AnswerButton
   - NextQButton
+  - SelectOceanButton
+  - SelectSpaceButton
   layers:
   - Default
   - TransparentFX

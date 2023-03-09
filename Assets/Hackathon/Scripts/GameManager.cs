@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
+  
     public enum Scene
     {
         Island = 0,
@@ -32,8 +33,10 @@ public class GameManager : MonoBehaviour
     public QuestionData quizQuestions;
     [HideInInspector]
     public Scene finalScene;
+    [HideInInspector]
+    public Fear fear;
 
-    public Fear _fear;
+  
     public GameObject player;
     public Animator sceneTransition;
     public TextMeshProUGUI screenQuestion;
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
     private int _totalQuestions =1;
     private int _answeredQuestions = 0;
     private bool _gameWon;
+    private float _percentToWin;
 
 
     private void Awake()
@@ -85,6 +89,8 @@ public class GameManager : MonoBehaviour
             _totalQuestions = quizQuestions.Questions.Count;
             questionCount.text = "0/" + _totalQuestions.ToString();
 
+            _percentToWin = (float)(Random.Range(50, 90) * .01);
+
         }
         catch (WebException wex)
         {
@@ -109,14 +115,14 @@ public class GameManager : MonoBehaviour
         scoreInccorect.text = _incorrectAnswers.ToString();
         _answeredQuestions = _correctAnswers + _incorrectAnswers;
         questionCount.text = _answeredQuestions.ToString() + "/" + _totalQuestions;
-        _gameWon = _correctAnswers / _totalQuestions > 0.5f;
+        _gameWon = _correctAnswers / _totalQuestions > _percentToWin;
         if (_answeredQuestions == _totalQuestions) { StartCoroutine(EndGame()); }
     }
 
     IEnumerator EndGame()
     {
 
-        switch (_fear)
+        switch (fear)
         {
             case Fear.Ocean:
                 finalScene = (_gameWon ? Scene.UnderwaerCalm : Scene.UnderwaterFear);
@@ -129,7 +135,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         //sceneTransition.SetTrigger("SceneFadeOut");
         sceneTransition.Play("SceneFadeOut", -1, 0.0f);
-        //SceneManager.LoadScene((int)GameManager.Instance.finalScene);
+        SceneManager.UnloadScene((int)Scene.Island);
     }
 
  
