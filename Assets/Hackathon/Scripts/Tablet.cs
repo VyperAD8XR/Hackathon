@@ -13,12 +13,12 @@ public class Tablet : MonoBehaviour
 {
     [HideInInspector]
     public static Tablet Instance;
-    public TextMeshProUGUI question;
     public Button answerButtonTemplate;
+    public Button nextQuestionButton;
 
     private string _correctAnswer;
     private int _intCorrectAnswerIndex;
-    private List<Button> _answerButtons;
+    private List<Button> _answerButtons = new List<Button>();
 
     private void Awake()
     {
@@ -27,7 +27,8 @@ public class Tablet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // LoadQuestion();
+
+        LoadQuestion();
     }
 
     // Update is called once per frame
@@ -36,20 +37,19 @@ public class Tablet : MonoBehaviour
 
     }
 
-    public void LoadAnswers(QuestionsObject _question)
+    public void LoadQuestion()
     {
-        
+        QuestionsObject _question;
         int _answerIndex = 0;
         int _questaionIndex = 0;
         int _totalAnswers;
-        List<Button> _availableButtons = new List<Button>();
+        List<Button> _availableButtons ;
         Button button;
 
-
-        //foreach (answerButtons _button in answerButtons){_button.available = true; }
-        //_availableButtons = answerButtons.Where(x => x.available).ToList();
-
-    
+        nextQuestionButton.gameObject.SetActive(false);
+        _questaionIndex = Random.Range(0, GameManager.Instance.quizQuestions.Questions.Count - 1);
+        _question = GameManager.Instance.quizQuestions.Questions[_questaionIndex];
+        GameManager.Instance.screenQuestion.text = _question.question;
 
         foreach (GameObject _answerButton in GameObject.FindGameObjectsWithTag("AnswerButton"))
         {
@@ -64,7 +64,6 @@ public class Tablet : MonoBehaviour
         }
 
         _availableButtons = _answerButtons;
-        question.text = _question.question;
         _correctAnswer = _question.correctAnswer;
 
         while (_availableButtons.Count != 0)
@@ -85,7 +84,7 @@ public class Tablet : MonoBehaviour
             // answerButtons[_answerIndex].available = false;
         }
         GameManager.Instance.quizQuestions.Questions.RemoveAt(_questaionIndex);
-        GameManager.Instance.totalQuestions--;
+       // GameManager.Instance.totalQuestions--;
         answerButtonTemplate.gameObject.SetActive(false);
 
     }
@@ -95,10 +94,10 @@ public class Tablet : MonoBehaviour
         switch (_button.tag)
         {
             case "AnswerButton":
-                GameManager.Instance.UpdateScore( CheckAnswer(_button);
+                GameManager.Instance.UpdateScore( CheckAnswer(_button));
                 break;
             case "NextQButton":
-                GameManager.Instance.LoadQuestion();
+                LoadQuestion();
                 break;
         }
     }
@@ -109,7 +108,7 @@ public class Tablet : MonoBehaviour
         {
             _answerButtons[i].GetComponent<TextMeshPro>().color = (i == _intCorrectAnswerIndex ? Color.green : Color.red);
         }
-
+        nextQuestionButton.gameObject.SetActive(true);
         //Returns whether the answer is correct or not 
         return _button.transform.Find("AnswerText").GetComponent<TextMeshProUGUI>().text == _correctAnswer;
     }

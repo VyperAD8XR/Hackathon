@@ -16,10 +16,16 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public static GameManager Instance;
 
-    public int totalQuestions = 20;
+
     public TextMeshProUGUI screenQuestion;
+    public TextMeshProUGUI scoreInccorect;
+    public TextMeshProUGUI scoreCorrect;
+    public TextMeshProUGUI questionCount;
 
     private string _quizEndpoint;
+    private int _correctAnswers = 0;
+    private int _incorrectAnswers = 0;
+    private int _totalQuestions = 20;
 
 
     private void Awake()
@@ -33,7 +39,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadQuestions();
-        LoadQuestion();
     }
 
     public string LoadQuestions()
@@ -54,7 +59,6 @@ public class GameManager : MonoBehaviour
             {
                 using (var reader = new StreamReader(response.GetResponseStream()))
                 {
-                    //responseContent = reader.ReadToEnd() ;
                     responseContent = "{\"Questions\":" + reader.ReadToEnd() + "}";
                 }
             }
@@ -76,21 +80,14 @@ public class GameManager : MonoBehaviour
             return null;
         }
     }
-    public void LoadQuestion()
-    {
-        int _questaionIndex;
-        QuestionsObject _question;
-
-        _questaionIndex = Random.Range(0, quizQuestions.Questions.Count - 1);
-        _question = quizQuestions.Questions[_questaionIndex];
-        this.screenQuestion.text = _question.question;
-
-        Tablet.Instance.LoadAnswers(_question);
-        quizQuestions.Questions.RemoveAt(_questaionIndex);
-    }
 
     public void UpdateScore(bool _isCorrect)
     {
+        _correctAnswers = (_isCorrect ? _correctAnswers++ : _correctAnswers);
+        _incorrectAnswers = (_isCorrect ? _incorrectAnswers++ : _incorrectAnswers);
 
+        scoreCorrect.text = _correctAnswers.ToString();
+        scoreInccorect.text = _incorrectAnswers.ToString();
+        questionCount.text = (_correctAnswers + _incorrectAnswers).ToString() + "/" + _totalQuestions;
     }
 }
