@@ -46,6 +46,7 @@ public class Tablet : MonoBehaviour
         string _answerButtonText;
 
         nextQuestionButton.gameObject.SetActive(false);
+        GameManager.Instance.questionPanel.GetComponent<Image>().color = Color.gray;
         _answerSelected = false;
         _answerButtons.Clear();
         _questaionIndex = Random.Range(0, GameManager.Instance.quizQuestions.Questions.Count - 1);
@@ -116,6 +117,7 @@ public class Tablet : MonoBehaviour
         _buttonTextComponent.color = (_isCorrect ? Color.black : Color.white);
         _button.GetComponent<Button>().enabled =false;
         _button.GetComponent<Image>().color = (_isCorrect ? Color.green : Color.red);
+        GameManager.Instance.questionPanel.GetComponent<Image>().color = (_isCorrect ? Color.green : Color.red);
 
         if (!_isCorrect)
         {
