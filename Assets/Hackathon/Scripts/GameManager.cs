@@ -8,13 +8,26 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector]
-    public QuestionData quizQuestions;
+
+    public enum Scene
+    {
+        Island = 0,
+        LunarCalm = 1,
+        LunarFear = 2,
+        UnderwaerCalm = 3,
+        UnderwaerFear = 4
+    }
+
     [HideInInspector]
     public static GameManager Instance;
+    [HideInInspector]
+    public QuestionData quizQuestions;
+    //[HideInInspector]
+    public Scene finalScene;
 
     public GameObject player;
     public Animator sceneTransition;
@@ -22,11 +35,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreInccorect;
     public TextMeshProUGUI scoreCorrect;
     public TextMeshProUGUI questionCount;
-
     private string _quizEndpoint;
     private int _correctAnswers = 0;
     private int _incorrectAnswers = 0;
-    private int _totalQuestions = 5;
+    private int _totalQuestions =1;
+    private int _answeredQuestions = 0;
 
 
     private void Awake()
@@ -63,6 +76,8 @@ public class GameManager : MonoBehaviour
                 }
             }
             quizQuestions = JsonConvert.DeserializeObject<QuestionData>(_responseContent);
+            _totalQuestions = quizQuestions.Questions.Count;
+            questionCount.text = "0/" + _totalQuestions.ToString();
 
         }
         catch (WebException wex)
@@ -86,14 +101,21 @@ public class GameManager : MonoBehaviour
 
         scoreCorrect.text = _correctAnswers.ToString();
         scoreInccorect.text = _incorrectAnswers.ToString();
-        questionCount.text = (_correctAnswers + _incorrectAnswers).ToString() + "/" + _totalQuestions;
-
+        _answeredQuestions = _correctAnswers + _incorrectAnswers;
+        questionCount.text = _answeredQuestions.ToString() + "/" + _totalQuestions;
+      //  finalScene = Scene.LunarCalm;
+    
+        if (_answeredQuestions == _totalQuestions) { StartCoroutine(EndGame()); }
     }
 
-    IEnumerator EndGame(GameObject _personIcon, float _elapsedTime)
+    IEnumerator EndGame()
     {
-        //yield to 'End game animation" method
-        yield return new WaitForSeconds(5.0f);
+        //yield to 'End game animation" method in the future
+        yield return new WaitForSeconds(1.0f);
+        //sceneTransition.SetTrigger("SceneFadeOut");
         sceneTransition.Play("SceneFadeOut", -1, 0.0f);
+        //SceneManager.LoadScene((int)GameManager.Instance.finalScene);
     }
+
+ 
 }

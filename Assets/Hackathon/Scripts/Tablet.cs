@@ -22,7 +22,7 @@ public class Tablet : MonoBehaviour
 
     private string _correctAnswer;
     private int _correctAnswerIndex;
-    private List<Button> _answerButtons = new List<Button>();
+    private List<Button> _answerButtons = new();
     private bool _answerSelected;
 
     private void Awake()
@@ -36,20 +36,13 @@ public class Tablet : MonoBehaviour
         LoadQuestion();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+   
     public void LoadQuestion()
     {
         QuestionsObject _question;
-        int _answerIndex = 0;
-        int _questaionIndex = 0;
-        int _totalAnswers;
-        List<Button> _availableButtons = new List<Button>();
-        Button button;
+        int _answerIndex;
+        int _questaionIndex;
+        List<Button> _availableButtons = new();
         string _answerButtonText;
 
         nextQuestionButton.gameObject.SetActive(false);
@@ -119,13 +112,11 @@ public class Tablet : MonoBehaviour
         bool _isCorrect;
 
         _buttonTextComponent = _button.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-
         _isCorrect = _buttonTextComponent.text == _correctAnswer;
         _buttonTextComponent.color = (_isCorrect ? Color.black : Color.white);
         _button.GetComponent<Button>().enabled =false;
         _button.GetComponent<Image>().color = (_isCorrect ? Color.green : Color.red);
 
-        //        _button.GetComponent<Image>().color = (_isCorrect ? _colorCorrect.ToColor() : _colorIncorrect.ToColor());
         if (!_isCorrect)
         {
             _answerButtons[_correctAnswerIndex].GetComponent<Image>().color = Color.green;

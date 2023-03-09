@@ -8,6 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Hackathon/Scenes/Island.unity
     guid: b6c9cc62e0ae18f4c89ffcd7248b7b20
+  - enabled: 1
+    path: Assets/Hackathon/Scenes/Lunar_Calm.unity
+    guid: a1c57b5fe56bdc34484b0ef155643191
+  - enabled: 1
+    path: Assets/Hackathon/Scenes/LunarFear.unity
+    guid: 206fdc38e0c379349be1d7bd74267a09
+  - enabled: 1
+    path: Assets/Hackathon/Scenes/Underwater_Calm.unity
+    guid: 3e7ffd7cc6c908848a5c28a17d0be398
+  - enabled: 1
+    path: Assets/Hackathon/Scenes/Underwater_Fear.unity
+    guid: 436033f2c7a525d488bb7fc01a62ccad
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: dec3111ed4a8fb5479e42ee1f4a725d0, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8fbeb5a143c6eba4ba7ae42661abfff4, type: 2}
