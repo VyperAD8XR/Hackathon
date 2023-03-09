@@ -16,19 +16,24 @@ public class GameManager : MonoBehaviour
     public enum Scene
     {
         Island = 0,
-        LunarCalm = 1,
-        LunarFear = 2,
+        SpaceCalm = 1,
+        SpaceFear = 2,
         UnderwaerCalm = 3,
-        UnderwaerFear = 4
+        UnderwaterFear = 4
     }
-
+    public enum Fear
+    {
+        Ocean,
+        Space
+    }
     [HideInInspector]
     public static GameManager Instance;
     [HideInInspector]
     public QuestionData quizQuestions;
-    //[HideInInspector]
+    [HideInInspector]
     public Scene finalScene;
 
+    public Fear _fear;
     public GameObject player;
     public Animator sceneTransition;
     public TextMeshProUGUI screenQuestion;
@@ -40,6 +45,7 @@ public class GameManager : MonoBehaviour
     private int _incorrectAnswers = 0;
     private int _totalQuestions =1;
     private int _answeredQuestions = 0;
+    private bool _gameWon;
 
 
     private void Awake()
@@ -103,13 +109,22 @@ public class GameManager : MonoBehaviour
         scoreInccorect.text = _incorrectAnswers.ToString();
         _answeredQuestions = _correctAnswers + _incorrectAnswers;
         questionCount.text = _answeredQuestions.ToString() + "/" + _totalQuestions;
-      //  finalScene = Scene.LunarCalm;
-    
+        _gameWon = _correctAnswers / _totalQuestions > 0.5f;
         if (_answeredQuestions == _totalQuestions) { StartCoroutine(EndGame()); }
     }
 
     IEnumerator EndGame()
     {
+
+        switch (_fear)
+        {
+            case Fear.Ocean:
+                finalScene = (_gameWon ? Scene.UnderwaerCalm : Scene.UnderwaterFear);
+                break;
+            case Fear.Space:
+                finalScene = (_gameWon ? Scene.SpaceCalm : Scene.SpaceFear);
+                break;
+        }
         //yield to 'End game animation" method in the future
         yield return new WaitForSeconds(1.0f);
         //sceneTransition.SetTrigger("SceneFadeOut");
