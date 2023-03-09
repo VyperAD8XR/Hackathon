@@ -27,7 +27,7 @@ public class Tablet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // LoadQuestion();
+         ;
     }
 
     // Update is called once per frame
@@ -36,20 +36,17 @@ public class Tablet : MonoBehaviour
 
     }
 
-    public void LoadAnswers(QuestionsObject _question)
+    public void LoadQuestion()
     {
-        
+        QuestionsObject _question;
         int _answerIndex = 0;
         int _questaionIndex = 0;
-        int _totalAnswers;
         List<Button> _availableButtons = new List<Button>();
-        Button button;
 
-
-        //foreach (answerButtons _button in answerButtons){_button.available = true; }
-        //_availableButtons = answerButtons.Where(x => x.available).ToList();
-
-    
+        _questaionIndex = Random.Range(0, GameManager.Instance.quizQuestions.Questions.Count - 1);
+        _question = GameManager.Instance.quizQuestions.Questions[_questaionIndex];
+        GameManager.Instance.screenQuestion.text = _question.question;
+        GameManager.Instance.quizQuestions.Questions.RemoveAt(_questaionIndex);
 
         foreach (GameObject _answerButton in GameObject.FindGameObjectsWithTag("AnswerButton"))
         {
@@ -95,10 +92,10 @@ public class Tablet : MonoBehaviour
         switch (_button.tag)
         {
             case "AnswerButton":
-                GameManager.Instance.UpdateScore( CheckAnswer(_button);
+                GameManager.Instance.UpdateScore( CheckAnswer(_button));
                 break;
             case "NextQButton":
-                GameManager.Instance.LoadQuestion();
+                LoadQuestion();
                 break;
         }
     }
