@@ -103522,6 +103522,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8255178, guid: 410c945e55c262640b580594eddcfe67, type: 3}
+      propertyPath: m_Volume
+      value: 0.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255178, guid: 410c945e55c262640b580594eddcfe67, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: ec819acb9e602b645b71be509586fb0c, type: 3}
+    - target: {fileID: 8255178, guid: 410c945e55c262640b580594eddcfe67, type: 3}
       propertyPath: panLevelCustomCurve.m_RotationOrder
       value: 0
       objectReference: {fileID: 0}
