@@ -13,7 +13,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
-  
+
+    const int minWinPercentage = 50;
+    const int maxWinPercentage = 90;
+    const int minQuestions = 5;
+    const int maxQuestions = 10;
+
+
+
     public enum Scene
     {
         Island = 0,
@@ -52,27 +59,32 @@ public class GameManager : MonoBehaviour
     private int _answeredQuestions = 0;
     private bool _gameWon;
     private float _percentToWin;
-
+    private List<Tuple<string, string>> _mathEquations = new();
 
     private void Awake()
     {
         Instance = this;
-
-        _totalQuestions = Random.Range(5, 10);
-        //Currently all categories are used, the difficulty is 'easy', and the total questions IS 20. All can be configured via UI in the future wanted to utilize the limted time for other aspects of the project
+        LoadMathQuestions();
+        _totalQuestions = Random.Range(minQuestions, maxQuestions);
+        //Currently all categories are used, the difficulty is 'easy'. All can be configured via UI in the future wanted to utilize the limted time for other aspects of the project
         _quizEndpoint = "https://the-trivia-api.com/api/questions?categories=food_and_drink,general_knowledge,geography,history,music,science,society_and_culture,sport_and_leisure,film_and_tv,arts_and_literature&limit=" + _totalQuestions + "& difficulty=easy";
-
+        
 
     }
     // Start is called before the first frame update
     void Start()
     {
         LoadQuestions();
+     
+
     }
 
     public void LoadQuestions()
     {
 
+        QuestionsObject _question = new();
+        int _totalMathEquations;
+        int _mathEquationIndex;
         var _request = WebRequest.Create(_quizEndpoint) as HttpWebRequest;
 
         _request.KeepAlive = true;
@@ -92,10 +104,31 @@ public class GameManager : MonoBehaviour
 
                 }
             }
+
             quizQuestions = JsonConvert.DeserializeObject<QuestionData>(_responseContent);
+            
+            
+            _totalMathEquations = Random.Range(10, 20);
+
+            for (int x = 0; x < _totalMathEquations; x++)
+            {
+                _question = new();
+                _question.incorrectAnswers = new();
+                _mathEquationIndex = Random.Range(0, _mathEquations.Count - 1);
+                _question.question = _mathEquations[_mathEquationIndex].Item1;
+                _question.correctAnswer = _mathEquations[_mathEquationIndex].Item2;
+                _question.incorrectAnswers.Clear();
+                for (int i = 0; i <= 2; i++)
+                {
+                    _question.incorrectAnswers.Add(Random.Range(1, 30).ToString());
+                }
+                quizQuestions.Questions.Add(_question);
+            }
+
             _totalQuestions = quizQuestions.Questions.Count;
             questionCount.text = "0/" + _totalQuestions.ToString();
-            _percentToWin = (float)(Random.Range(50, 90) * .01);
+            _percentToWin = (float)(Random.Range(minWinPercentage, maxWinPercentage) * .01);
+
 
         }
         catch (WebException wex)
@@ -112,6 +145,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void LoadMathQuestions()
+    {
+
+        string[] equation;
+
+        //Sideload Math equations into quizQuestions
+
+        try
+        {
+            StreamReader mathEquations = new StreamReader(Application.dataPath + "/Hackathon/Data/MathEquations.csv");
+
+            while (!mathEquations.EndOfStream)
+            {
+                equation = mathEquations.ReadLine().Split(',');
+                _mathEquations.Add(new Tuple<string,string>(equation[0], equation[1]));
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
 
     public void UpdateScore(bool _isCorrect)
     {
